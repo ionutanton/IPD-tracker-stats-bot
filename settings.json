@@ -1,0 +1,6 @@
+{
+    "prefix" : "$",
+    "CUSTOM_MESSAGE_CLIMB_DEF" : ":arrow_up: **%PLAYER_NAME%** %USER_ICON% | %PREVIOUS_RANK% to %CURRENT_RANK% [PO in %TIME_TO_PO%] [swgoh](<https://swgoh.gg/p/%ALLY_CODE%/>)",
+    "CUSTOM_MESSAGE_DROP_DEF" : ":arrow_down: **%PLAYER_NAME%** %USER_ICON% | %PREVIOUS_RANK% to %CURRENT_RANK% [PO in %TIME_TO_PO%] [swgoh](<https://swgoh.gg/p/%ALLY_CODE%/>) %NAME%",
+    "ICON_DEF" : ":skull:"
+}
