@@ -9,7 +9,7 @@ $climb `CUSTOM_MESSAGE_CLIMB`
 $drop `CUSTOM_MESSAGE_DROP`
 $icon `ICON`
 $settings
-$stats #channel days
+$stats #channel days (where #channel is the channel where ipd has the webhook)
 
 Usage:
 On each use you need to run $settings to initialize.
