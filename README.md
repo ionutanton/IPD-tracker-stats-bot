@@ -7,7 +7,7 @@ https://discord.com/api/oauth2/authorize?client_id=828514266260176916&permission
 
 Commands:
 
-```$climb `CUSTOM_MESSAGE_CLIMB`
+$climb `CUSTOM_MESSAGE_CLIMB`
 
 $drop `CUSTOM_MESSAGE_DROP`
 
@@ -15,7 +15,7 @@ $icon `ICON`
 
 $settings
 
-$stats #channel days (where #channel is the channel where ipd has the webhook)```
+$stats #channel days (where #channel is the channel where ipd has the webhook)
 
 Usage:
 
