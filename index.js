@@ -40,7 +40,7 @@ client.on("message", async (msg) => {
   }
 
   if (msg.content.startsWith(prefix + "stats")) {
-    cmd_stats(msg);
+    await cmd_stats(msg);
   }
 });
 
@@ -144,7 +144,7 @@ function cmd_settings(msg) {
   log(settings_txt, msg);
 }
 
-function cmd_stats(msg) {
+async function cmd_stats(msg) {
   var guildid = msg.guild.id;
   var guildindex = GUILDS.indexOf(guildid);
   if (guildindex = -1) {
