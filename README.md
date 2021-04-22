@@ -46,7 +46,7 @@ You need also the following setup:
 
 5. run the `,seicon :enemy:` command to setup rotbot to have a enemy icon in the IPD channel
 
-7. wait a few days so that you have an output in 
+7. wait a few days so that you have an output in the IPD channel for the bot to succesfully parse
 
 6. run the `$icon 834303658727309364` command to tell the bot that the enemies are marked with this icon id in the IPD channel. Output should look like below
 ![ScreenShot](assets/ipd-rotbot.jpg)
