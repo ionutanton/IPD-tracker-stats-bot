@@ -154,37 +154,49 @@ async function cmd_stats(msg) {
   // get channelid and number of days as args
   var go = true;
   var args = msg.content.split(` `);
-  //check args 2 - channel id, 3 - number of days
-  var channelid = args[1].substring(2, args[1].length - 1);
-  const channel = client.channels.cache.get(channelid);
-  if (channel) {
-    console.log(`Getting data from guildid: ${channel.guild.id} channel name: ${channel.name}`);
-  } else {
-    log(`$stats needs first argument channel to be channel id (#channel)\nSee $help for usage`, msg);
-    go = false;
-  }
-  const days = args[2];
-  if (days) {
-    console.log(`Getting number of days: ${days}`);
-  } else {
-    log(`$stats needs second argument days to be a number\nSee $help for usage`, msg);
-    go = false;
-  }
-  if (go) {
-    log(`Making stats from ${channel.name} for ${days} days`, msg);
+  if (args.length > 2) {
+    //check args 2 - channel id, 3 - number of days
+    var channelid = args[1].substring(2, args[1].length - 1);
     try {
-      await make_stats(
-        msg,
-        channel,
-        days,
-        // GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP,
-        // GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB,
-        guildindex
-      );
-    } catch (err) {
-      console.log(err);
+      const channel = client.channels.cache.get(channelid);
+      if (channel) {
+        console.log(`Getting data from guildid: ${channel.guild.id} channel name: ${channel.name} author: ${msg.author.tag}`);
+      } else {
+        log(`$stats needs first argument channel to be channel id (#channel)\nSee $help for usage`, msg);
+        go = false;
+      }
+      const days = args[2];
+      if (days) {
+        console.log(`Getting number of days: ${days}`);
+      } else {
+        log(`$stats needs second argument days to be a number\nSee $help for usage`, msg);
+        go = false;
+      }
+      if (go) {
+        log(`Making stats from ${channel.name} for ${days} days`, msg);
+        try {
+          await make_stats(
+            msg,
+            channel,
+            days,
+            // GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP,
+            // GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB,
+            guildindex
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } catch (error) {
+      console.log(`bad permissions - cannot read channel in guild: ${msg.guild.id} by author: ${msg.author.username}`);
+      console.log(error);
+      logdm(`bot needs permissions to view all channels, read messages, read message history and send messages in channel that executes command and in IPD-FOR-ROTBOT channel`, msg)
     }
 
+
+  } else {
+    console.log(`bad argument for $stats in guild: ${msg.guild.id} by author: ${msg.author.tag}`)
+    log(`$stats needs 2 arguments, first argument channel to be channel id (#channel) and second argument days to be a number\nSee $help for usage`, msg);
   }
 }
 
@@ -192,6 +204,15 @@ function log(string, msg) {
   try {
     msg.channel.send(string);
   } catch (err) {
+    console.log(err);
+    logdm(`bot needs permissions to view all channels, read messages, read message history and send messages in channel that executes command and in IPD-FOR-ROTBOT channel`);
+  }
+}
+
+function logdm(string, msg) {
+  try {
+    msg.author.send(string);
+  } catch (error) {
     console.log(err);
   }
 }
@@ -215,7 +236,7 @@ async function make_stats(
   guildindex
 ) {
   //set channel to search msg from
-  console.log(`Getting channel id: ${channel}`);
+  console.log(`Getting messages from channel ${channel.name}`);
 
   //Async method - needs async (msg) on function
   let rcv_msg = await lots_of_messages_getter(channel, 2000, days);
@@ -292,7 +313,7 @@ function stats_all(msg_parsed, guildindex) {
       };
       msg_byNames[index].name = msg_current.PLAYER_NAME;
     }
-    msg_byNames[index].msg.push(msg_current); 
+    msg_byNames[index].msg.push(msg_current);
   }
 
   //sort by date messages grouped by name
