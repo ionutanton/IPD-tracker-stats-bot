@@ -414,7 +414,9 @@ function parse_msg(mgs_to_parse, bool) {
       var parsed = mgs_to_parse.content.split(DROP);
     }
   }
-  msg_item.USER_ICON = parsed[3].substring(1, parsed[3].length - 1);
+  if (parsed[3]>2) {
+    msg_item.USER_ICON = parsed[3].substring(1, parsed[3].length - 1);
+  }
   msg_item.ALLY_CODE = parsed[2];
   msg_item.PLAYER_NAME = parsed[4];
   msg_item.PREVIOUS_RANK = parsed[5];
