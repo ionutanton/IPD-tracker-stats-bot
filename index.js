@@ -318,7 +318,7 @@ function stats_all(msg_parsed, guildindex) {
         if (curr_time < last_time) {
           if (Daylow < Number(item[j].CURRENT_RANK)) {
             Daylow = Number(item[j].CURRENT_RANK);
-            if (SHARD.includes(item[j].DROPPED_BY)) {
+            if (GUILD_SETTINGS[guildindex].SHARD.includes(item[j].DROPPED_BY)) {
               Daydropped += 1;
             }
           }
