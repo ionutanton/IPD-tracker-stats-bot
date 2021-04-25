@@ -5,8 +5,16 @@ IPD tracker stats bot for discord
 V1.0.2
 - now works only with rotbot installation of IPD
 
+V1.0.6
+- webhook channel for debugging
+- catches some errors
+- sends dm when does not have Permissions
+- fix finding shard members in dropped by
+
 ## Invite to discord:	
-[invite](https://discord.com/api/oauth2/authorize?client_id=828514266260176916&permissions=76800&scope=bot)
+[invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=828514266260176916&permissions=76800&scope=bot)
+
+[support discord server](https://discord.gg/CJYSH3dt)
 
 ## Bot permissions needed:	
 
@@ -31,6 +39,10 @@ Manage messages
 ## Usage:	
 
 You will need [ipd](https://github.com/iprobedroid/swgoh-arena-tracker) and [rotbot](http://rotbot.eu/) with [sniper](http://rotbot.eu/sniper-rb/) installed and a channel that IPD has its webhook.
+
+Rotbot installation needs to be a clean one. The use of ,suicon is forbidded, it will overwrite the ,seicon needed to identify enemies.
+
+Bot is in beta development so it will not remmember settings, please set $icon before running $stats command.
 
 Use $help to get syntax in discord.	
 
