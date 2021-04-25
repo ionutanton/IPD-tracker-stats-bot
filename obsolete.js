@@ -1,4 +1,55 @@
 // obsolete
+
+// not used
+function cmd_drop(msg) {
+    //set drop message
+    var go = false;
+    if (msg.content.length > 7) {
+      var arg = msg.content.substring(7, msg.content.length - 1);
+      if (arg) {
+        var guildid = msg.guild.id;
+        var guildindex = GUILDS.indexOf(guildid);
+        if (guildindex == -1) {
+          initguild(guildid);
+          guildindex = GUILDS.indexOf(guildid);
+        }
+
+        GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP = arg;
+        console.log(`Set for guild:${guildid} CUSTOM_MESSAGE_DROP: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP}`);
+        log(`Set \`CUSTOM_MESSAGE_DROP: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP}\``,msg);
+        go = true;
+      }
+    }
+    if (!go) {
+      log("Usage: \n ```$drop `CUSTOM_MESSAGE_DROP` ```",msg);
+    }
+}
+
+// not used
+function cmd_climb(msg) {
+  //set climb message
+  go = false;
+  if (msg.content.length > 8) {
+    var arg = msg.content.substring(8, msg.content.length - 1);
+    if (arg) {
+      var guildid = msg.guild.id;
+      var guildindex = GUILDS.indexOf(guildid);
+      if (guildindex == -1) {
+        initguild(guildid);
+        guildindex = GUILDS.indexOf(guildid);
+      }
+
+      GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB = arg;
+      console.log(`Set for guild:${guildid} CUSTOM_MESSAGE_CLIMB: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB}`);
+      log(`Set \`CUSTOM_MESSAGE_CLIMB: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB}\``, msg);
+      go = true;
+    }
+  }
+  if (!go) {
+    log("Usage: \n ```$climb `CUSTOM_MESSAGE_CLIMB` ```", msg);
+  }
+}
+
 // parse all messages and store only drop data in an array
 function parse_all_custom(rcv_msg, CUSTOM_MESSAGE_DROP, CUSTOM_MESSAGE_CLIMB) {
     //init parsing splitters by messages for climb or drop

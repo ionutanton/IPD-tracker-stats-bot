@@ -5,7 +5,7 @@ const {
   // CUSTOM_MESSAGE_DROP_DEF,
   ICON_DEF,
 } = require("./settings");
-const { token } = require("./secret");
+const { token, devhookid, devhooktoken } = require("./secret");
 const client = new Discord.Client();
 var SHARD = [];
 var GUILDS = [];
@@ -13,7 +13,7 @@ var GUILD_SETTINGS = [];
 
 client.on("ready", () => {
   var date = new Date();
-  console.log(`Logged in as ${client.user.tag} on ${date}`);
+  logdev(`Logged in as ${client.user.tag} on ${date}`);
 });
 
 client.on("message", async (msg) => {
@@ -55,56 +55,6 @@ function cmd_help(msg) {
   log(helptext, msg);
 }
 
-// not used
-function cmd_climb(msg) {
-  //set climb message
-  go = false;
-  if (msg.content.length > 8) {
-    var arg = msg.content.substring(8, msg.content.length - 1);
-    if (arg) {
-      var guildid = msg.guild.id;
-      var guildindex = GUILDS.indexOf(guildid);
-      if (guildindex == -1) {
-        initguild(guildid);
-        guildindex = GUILDS.indexOf(guildid);
-      }
-
-      GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB = arg;
-      console.log(`Set for guild:${guildid} CUSTOM_MESSAGE_CLIMB: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB}`);
-      log(`Set \`CUSTOM_MESSAGE_CLIMB: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB}\``, msg);
-      go = true;
-    }
-  }
-  if (!go) {
-    log("Usage: \n ```$climb `CUSTOM_MESSAGE_CLIMB` ```", msg);
-  }
-}
-
-// not used
-function cmd_drop(msg) {
-  //   //set drop message
-  //   var go = false;
-  //   if (msg.content.length > 7) {
-  //     var arg = msg.content.substring(7, msg.content.length - 1);
-  //     if (arg) {
-  //       var guildid = msg.guild.id;
-  //       var guildindex = GUILDS.indexOf(guildid);
-  //       if (guildindex == -1) {
-  //         initguild(guildid);
-  //         guildindex = GUILDS.indexOf(guildid);
-  //       }
-
-  //       GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP = arg;
-  //       console.log(`Set for guild:${guildid} CUSTOM_MESSAGE_DROP: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP}`);
-  //       log(`Set \`CUSTOM_MESSAGE_DROP: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP}\``,msg);
-  //       go = true;
-  //     }
-  //   }
-  //   if (!go) {
-  //     log("Usage: \n ```$drop `CUSTOM_MESSAGE_DROP` ```",msg);
-  //   }
-}
-
 function cmd_icon(msg) {
   //set non shard icon
   go = false;
@@ -119,7 +69,7 @@ function cmd_icon(msg) {
       }
 
       GUILD_SETTINGS[guildindex].ICON = arg;
-      console.log(`Set for guild:${guildid} ICON: ${GUILD_SETTINGS[guildindex].ICON}`);
+      logdev(`Set for guild:${guildid} ICON: ${GUILD_SETTINGS[guildindex].ICON}`);
       log(`Set \`ICON: ${GUILD_SETTINGS[guildindex].ICON}\``, msg);
       go = true;
     }
@@ -160,14 +110,14 @@ async function cmd_stats(msg) {
     try {
       const channel = client.channels.cache.get(channelid);
       if (channel) {
-        console.log(`Getting data from guildid: ${channel.guild.id} channel name: ${channel.name} author: ${msg.author.tag}`);
+        logdev(`Getting data from guildid: ${channel.guild.id} channel name: ${channel.name} author: ${msg.author.tag}`);
       } else {
         log(`$stats needs first argument channel to be channel id (#channel)\nSee $help for usage`, msg);
         go = false;
       }
       const days = args[2];
       if (days) {
-        console.log(`Getting number of days: ${days}`);
+        logdev(`Getting number of days: ${days}`);
       } else {
         log(`$stats needs second argument days to be a number\nSee $help for usage`, msg);
         go = false;
@@ -184,18 +134,18 @@ async function cmd_stats(msg) {
             guildindex
           );
         } catch (err) {
-          console.log(err);
+          logdev(err);
         }
       }
     } catch (error) {
-      console.log(`bad permissions - cannot read channel in guild: ${msg.guild.id} by author: ${msg.author.username}`);
-      console.log(error);
+      logdev(`bad permissions - cannot read channel in guild: ${msg.guild.id} by author: ${msg.author.username}`);
+      logdev(error);
       logdm(`bot needs permissions to view all channels, read messages, read message history and send messages in channel that executes command and in IPD-FOR-ROTBOT channel`, msg)
     }
 
 
   } else {
-    console.log(`bad argument for $stats in guild: ${msg.guild.id} by author: ${msg.author.tag}`)
+    logdev(`bad argument for $stats in guild: ${msg.guild.id} by author: ${msg.author.tag}`)
     log(`$stats needs 2 arguments, first argument channel to be channel id (#channel) and second argument days to be a number\nSee $help for usage`, msg);
   }
 }
@@ -204,7 +154,7 @@ function log(string, msg) {
   try {
     msg.channel.send(string);
   } catch (err) {
-    console.log(err);
+    logdev(err);
     logdm(`bot needs permissions to view all channels, read messages, read message history and send messages in channel that executes command and in IPD-FOR-ROTBOT channel`);
   }
 }
@@ -213,8 +163,15 @@ function logdm(string, msg) {
   try {
     msg.author.send(string);
   } catch (error) {
-    console.log(err);
+    logdev(err);
   }
+}
+
+function logdev(string){
+  console.log(string);
+  const webhook = new Discord.WebhookClient(devhookid, devhooktoken);
+  webhook.send(string)
+    .catch(console.error);
 }
 
 function initguild(guildid) {
@@ -226,7 +183,7 @@ function initguild(guildid) {
     SHARD: ``
   };
   GUILD_SETTINGS.push(settings);
-  console.log(`Init guildid ${guildid}`);
+  logdev(`Init guildid ${guildid}`);
 }
 
 async function make_stats(
@@ -236,25 +193,25 @@ async function make_stats(
   guildindex
 ) {
   //set channel to search msg from
-  console.log(`Getting messages from channel ${channel.name}`);
+  logdev(`Getting messages from channel ${channel.name}`);
 
   //Async method - needs async (msg) on function
   let rcv_msg = await lots_of_messages_getter(channel, 2000, days);
-  console.log(`Read ${rcv_msg.length} messages`);
+  logdev(`Read ${rcv_msg.length} messages`);
   log(`Read ${rcv_msg.length} messages`, msg);
 
   //parse all messages
   let msg_parsed = parse_all(
     rcv_msg,
   );
-  console.log(`Parsed ${msg_parsed.length} climb messages`);
+  logdev(`Parsed ${msg_parsed.length} climb messages`);
   log(`Parsed ${msg_parsed.length} climb messages`, msg);
 
   //make stats
   let msg_stats = stats_all(msg_parsed, guildindex);
-  console.log(`Names found: ${Object.keys(msg_stats).length}`);
+  logdev(`Names found: ${Object.keys(msg_stats).length}`);
   log(`Names found: ${Object.keys(msg_stats).length}`, msg);
-  console.log(`Found shard members: ${GUILD_SETTINGS[guildindex].SHARD.length}`);
+  logdev(`Found shard members: ${GUILD_SETTINGS[guildindex].SHARD.length}`);
   log(`Found shard members: ${GUILD_SETTINGS[guildindex].SHARD.length}`, msg);
 
   //publish data to console and channel for shard members
@@ -273,7 +230,7 @@ async function make_stats(
       }
       msg_out += `Average Daily dropped by shard member: ${msg_stats[i].DaydroppedAvr.toFixed(2)}\n`;
 
-      console.log(msg_out);
+      logdev(msg_out);
       log(msg_out, msg);
     }
   }
@@ -468,11 +425,11 @@ async function lots_of_messages_getter(channel, limit, days) {
   // current timestamp in milliseconds
   let ts = Date.now();
   let date_ob = new Date(ts);
-  console.log(`Current date ${date_ob}`);
+  logdev(`Current date ${date_ob}`);
   var ago = new Date();
   var tempdate = ago.getDate() - days;
   ago.setDate(tempdate);
-  console.log(`${days} days ago date ${ago}`);
+  logdev(`${days} days ago date ${ago}`);
 
   while (true) {
     const options = { limit: 100 };
@@ -481,7 +438,7 @@ async function lots_of_messages_getter(channel, limit, days) {
     }
 
     const messages = await channel.messages.fetch(options);
-    console.log(
+    logdev(
       `Received batch of ${messages.size} messages, lastID ${last_id}`
     );
     sum_messages.push(...messages.array());
@@ -490,7 +447,7 @@ async function lots_of_messages_getter(channel, limit, days) {
     last_id = last_msg.id;
     var date_msg = last_msg.createdAt;
 
-    console.log(`Last msg date ${date_msg}`);
+    logdev(`Last msg date ${date_msg}`);
 
     if (date_msg < ago) {
       break;
@@ -500,7 +457,7 @@ async function lots_of_messages_getter(channel, limit, days) {
       break;
     }
   }
-  console.log(`Received total of ${sum_messages.length}`);
+  logdev(`Received total of ${sum_messages.length}`);
 
   // remove messages that have date < ago
   for (var i = 0; i < sum_messages.length; i++) {
@@ -513,7 +470,7 @@ async function lots_of_messages_getter(channel, limit, days) {
       sum_messages_trimmed.push(sum_messages[i]);
     }
   }
-  console.log(`Trimmed total of ${sum_messages_trimmed.length}`);
+  logdev(`Trimmed total of ${sum_messages_trimmed.length}`);
   return sum_messages_trimmed;
 }
 

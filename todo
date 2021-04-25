@@ -2,3 +2,6 @@
 - add webhook channel for debugging in shard tracker discord server 
 - change all console.log to send to that webhook channel and console
 - add webhook to secret.json
+- add to readme that ,suicon overwrites ,seicon and do not use
+- make a docker script for update
+- add author name for every command in console
