@@ -69,7 +69,7 @@ function cmd_icon(msg) {
       }
 
       GUILD_SETTINGS[guildindex].ICON = arg;
-      logdev(`Set for guild:${guildid} ICON: ${GUILD_SETTINGS[guildindex].ICON}`);
+      logdev(`Set for guild:${guildid} ICON: ${GUILD_SETTINGS[guildindex].ICON} by author: ${msg.author.tag}`);
       log(`Set \`ICON: ${GUILD_SETTINGS[guildindex].ICON}\``, msg);
       go = true;
     }
@@ -90,8 +90,10 @@ function cmd_settings(msg) {
   }
   // settings_txt += `\`CUSTOM_MESSAGE_DROP: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_DROP}\`\n`;
   // settings_txt += `\`CUSTOM_MESSAGE_CLIMB: ${GUILD_SETTINGS[guildindex].CUSTOM_MESSAGE_CLIMB}\`\n`;
+  settings_txt += `\`GUILDID: ${GUILDS[guildindex]}\`\n`;
   settings_txt += `\`ICON: ${GUILD_SETTINGS[guildindex].ICON}\`\n`;
   log(settings_txt, msg);
+  logdev(`$settings command by author: ${msg.author.tag} in guild: ${GUILDS[guildindex]} has icon: ${GUILD_SETTINGS[guildindex].ICON}`);
 }
 
 async function cmd_stats(msg) {
@@ -123,7 +125,10 @@ async function cmd_stats(msg) {
         go = false;
       }
       if (go) {
+        logdev(`Making stats in guild: ${channel.guild.id} from ${channel.name} for ${days} days author: ${msg.author.tag}`, msg);
+        logdev(`ICON: ${GUILD_SETTINGS[guildindex].ICON}`,msg);
         log(`Making stats from ${channel.name} for ${days} days`, msg);
+        log(`ICON: ${GUILD_SETTINGS[guildindex].ICON}`,msg);
         try {
           await make_stats(
             msg,
@@ -215,6 +220,7 @@ async function make_stats(
   log(`Found shard members: ${GUILD_SETTINGS[guildindex].SHARD.length}`, msg);
 
   //publish data to console and channel for shard members
+  out_msg = 0;
   for (const i in msg_stats) {
     if (GUILD_SETTINGS[guildindex].SHARD.includes(msg_stats[i].name)) {
       var msg_out = ``;
@@ -229,11 +235,13 @@ async function make_stats(
         msg_out += msg_stats[i].Daydropped[j] + ` | `;
       }
       msg_out += `Average Daily dropped by shard member: ${msg_stats[i].DaydroppedAvr.toFixed(2)}\n`;
-
-      logdev(msg_out);
+      out_msg +=1;
+      console.log(msg_out);
       log(msg_out, msg);
     }
   }
+  logdev(`Command complete. Output stats for ${out_msg}`);
+  log(`Command complete`,msg);
 }
 
 // populate SHARD array with shard names
@@ -304,7 +312,7 @@ function stats_all(msg_parsed, guildindex) {
           Daylowlist.push(Daylow);
           Daylow = 0;
           Daydroppedlist.push(Daydropped);
-          Daydroped = 0;
+          Daydropped = 0;
         }
       } else {
         Daylow = Number(item[j].CURRENT_RANK);
