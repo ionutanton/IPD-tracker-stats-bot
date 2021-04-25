@@ -1,0 +1,4 @@
+- debug daily dropped by shard members, does not reset upon change of po
+- add webhook channel for debugging in shard tracker discord server 
+- change all console.log to send to that webhook channel and console
+- add webhook to secret.json
