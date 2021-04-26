@@ -51,7 +51,7 @@ function cmd_help(msg) {
   // helptext += "Experimental:";
   // helptext += "\n```$climb `CUSTOM_MESSAGE_CLIMB` ```";
   // helptext += "\n```$drop `CUSTOM_MESSAGE_DROP` ```";
-  helptext += "\n```$icon `ICON` | Set enemy icon in IPD-FOR-ROTBOT output```";
+  helptext += "\n```$icon ICON | Set enemy icon in IPD-FOR-ROTBOT output```";
   log(helptext, msg);
 }
 
@@ -59,7 +59,7 @@ function cmd_icon(msg) {
   //set non shard icon
   go = false;
   if (msg.content.length > 7) {
-    var arg = msg.content.substring(7, msg.content.length - 1);
+    var arg = msg.content.substring(6, msg.content.length);
     if (arg) {
       var guildid = msg.guild.id;
       var guildindex = GUILDS.indexOf(guildid);
@@ -75,7 +75,7 @@ function cmd_icon(msg) {
     }
   }
   if (!go) {
-    log("Usage: \n ```$icon `ICON` | Set enemy icon id in IPD-FOR-ROTBOT output```", msg);
+    log("Usage: \n ```$icon ICON | Set enemy icon id in IPD-FOR-ROTBOT output```", msg);
   }
 }
 
