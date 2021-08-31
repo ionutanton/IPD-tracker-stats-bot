@@ -12,7 +12,7 @@ V1.0.6
 - fix finding shard members in dropped by
 
 ## Invite to discord:	
-[invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=828514266260176916&permissions=76800&scope=bot)
+[invite the bot to your server](https://discord.gg/949u6vUhRU)
 
 [support discord server](https://discord.gg/CJYSH3dt)
 
